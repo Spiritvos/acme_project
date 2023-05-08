@@ -1,4 +1,5 @@
 # birthday/models.py
+from django.urls import reverse
 from django.db import models
 
 # Импортируется функция-валидатор.
@@ -12,6 +13,7 @@ class Birthday(models.Model):
     )
     # Валидатор указывается в описании поля.
     birthday = models.DateField('Дата рождения', validators=(real_age,))
+    imge = models.ImageField('Фото', blank=True, upload_to='birthdays_images')
     class Meta:
         constraints = (
             models.UniqueConstraint(
@@ -19,3 +21,6 @@ class Birthday(models.Model):
                 name='Unique person constraint',
             ),
         )
+    def get_absolute_url(self):
+    # С помощью функции reverse() возвращаем URL объекта.
+        return reverse('birthday:detail', kwargs={'pk': self.pk}) 
